@@ -3,7 +3,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // is there a default theme that i can just supply for convenience's sake?
 import { ThemeProvider } from "@material-ui/core/styles";
-import Navigation from "./navigation";
+import Navigation from "./Navigation";
 import Profile from "./Profile";
 import Home from "./Home";
 import theme from "./theme";

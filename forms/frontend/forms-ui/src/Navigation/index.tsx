@@ -108,9 +108,6 @@ export default function ResponsiveDrawer(props: Props) {
           >
             Tx
           </Button>
-          <Typography variant="h6" noWrap>
-            NUMIDA DASHBOARD
-          </Typography>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="dashboard pages">
