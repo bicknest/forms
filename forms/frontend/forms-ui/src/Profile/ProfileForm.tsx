@@ -34,7 +34,7 @@ export default function ProfileForms() {
   if (loading || !data) {
     return (
       <Container>
-        <Typography>LOADING...</Typography>
+        <Typography>LOADING</Typography>
       </Container>
     );
   }
