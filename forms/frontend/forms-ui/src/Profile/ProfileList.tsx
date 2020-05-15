@@ -12,7 +12,7 @@ const ProfileListQuery = gql`
 `;
 
 export default function ProfileList() {
-    const { data, loading, error } = useQuery<ProfileListQueryType>(ProfileListQuery);
+    const { data, loading, error } = useQuery(ProfileListQuery);
   if (error || !data) {
     return <div>Error!</div>;
   }
@@ -23,7 +23,7 @@ export default function ProfileList() {
     <Container>
       <Typography variant="h1">Profile List</Typography>
       <ul>
-        {data?.allLoans?.edges?.map(n => n?.node && <Typography {...n.node.name} />)}
+        {data?.allLoans?.edges?.map((n: any) => n?.node && <Typography {...n.node.name} />)}
       </ul>
     </Container>
   );
