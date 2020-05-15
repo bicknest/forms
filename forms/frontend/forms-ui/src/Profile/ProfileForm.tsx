@@ -1,48 +1,70 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { gql, useQuery, useMutation } from "@apollo/client";
-import Container from "@material-ui/core/Container";
+import { gql, useMutation } from "@apollo/client";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 
-const ProfileFormsQuery = gql`
-  query ProfileForms {
-    profile(pk: $pk) {
-      ...ProfileForm
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    paper: {
+      padding: theme.spacing(2),
+      flex: 1
     }
-  }
-  ${ProfileForm.data}
-`;
+  })
+);
 
-export default function ProfileForms() {
-  const { pk } = useParams();
-  const pk_num = Number(pk);
-  const { data, loading, error } = useQuery<
-    ProfileFormsQueryType,
-    ProfileFormsQueryVariables
-  >(ProfileFormsQuery, {
-    variables: {
-      pk: pk_num
+const fragments = {
+  data: gql`
+    fragment ProfileData on Profile {
+      name
+      age
+      phoneNumber
+      gender
+      business
     }
-  });
-  if (error) {
-    return (
-      <Container>
-        <Typography>OH NO! ERROR! {error.message}</Typography>
-      </Container>
-    );
-  }
-  if (loading || !data) {
-    return (
-      <Container>
-        <Typography>LOADING</Typography>
-      </Container>
-    );
-  }
-  const profile = data && data.profile;
+  `
+};
+
+interface Props {
+  profile: ProfileData;
+  saveID: number;
+}
+
+function ProfileForm(props: Props) {
+  const classes = useStyles();
   return (
-    <Container>
-      <Typography variant="h1">Profile Forms</Typography>
-      <ProfileForm profile={profile} />
-    </Container>
+    <Grid container item spacing={2} xs={12} sm={6}>
+      <Paper className={classes.paper}>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Enter your profile information
+          </Typography>
+        </Grid>
+        <Grid container item xs={12}>
+          <FormikWrapper>
+            <Grid item xs={12}>
+              <Field name="acquisitionChannel">
+                {({ field, form: { isSubmitting }, meta }: FieldProps) => (
+                  <TextField
+                    {...field}
+                    id="acq"
+                    select
+                    label="Acquisition Channel"
+                    fullWidth
+                    variant="outlined"
+                    error={!!meta.error}
+                  ></TextField>
+                )}
+              </Field>
+            </Grid>
+          </FormikWrapper>
+        </Grid>
+      </Paper>
+    </Grid>
   );
 }
+
+ProfileForm.fragments = fragments;
+
+export default ProfileForm;
