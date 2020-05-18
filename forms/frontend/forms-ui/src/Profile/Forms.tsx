@@ -6,9 +6,9 @@ import Typography from "@material-ui/core/Typography";
 import ProfileForm from "./ProfileForm";
 
 const ProfileFormsQuery = gql`
-  query ProfileForms {
+  query FormsData {
     profile(pk: $pk) {
-      ...ProfileForm
+      ...ProfileData
     }
   }
   ${ProfileForm.fragments.data}

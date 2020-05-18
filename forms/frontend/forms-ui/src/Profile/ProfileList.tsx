@@ -6,9 +6,13 @@ import { gql, useQuery } from "@apollo/client";
 const ProfileListQuery = gql`
   query allProfiles {
     allProfiles {
-      name
-    }
-  }
+      edges {
+        node {
+          name
+       }
+     }
+   }
+ }
 `;
 
 export default function ProfileList() {

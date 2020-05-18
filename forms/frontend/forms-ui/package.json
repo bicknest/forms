@@ -27,7 +27,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "apollo:download-schema": "apollo schema:download --endpoint=http://localhost:8000/graphiql schema.json",
-    "apollo:codegen": "apollo client:codegen --target=typescript --globalTypeFiles=src/__generated__/globalTypes.ts"
+    "apollo:codegen": "apollo client:codegen --target=typescript --globalTypesFile=src/__generated__/globalTypes.ts"
   },
   "eslintConfig": {
     "extends": "react-app"

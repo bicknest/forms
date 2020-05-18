@@ -21,7 +21,9 @@ const fragments = {
       age
       phoneNumber
       gender
-      business
+      business {
+        id
+      }
     }
   `
 };
