@@ -3,8 +3,6 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProfileGender } from "./../../__generated__/globalTypes";
-
 // ====================================================
 // GraphQL fragment: ProfileData
 // ====================================================
@@ -22,6 +20,5 @@ export interface ProfileData {
   name: string;
   age: number | null;
   phoneNumber: string;
-  gender: ProfileGender | null;
   business: ProfileData_business | null;
 }
