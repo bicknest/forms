@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import ProfileForm from "./ProfileForm";
 
 const ProfileFormsQuery = gql`
-  query FormsData {
+  query FormsData($pk: Int) {
     profile(pk: $pk) {
       ...ProfileData
     }
@@ -17,6 +17,7 @@ const ProfileFormsQuery = gql`
 export default function Forms() {
   const { pk } = useParams();
   const pk_num = Number(pk);
+  console.log(pk);
   const { data, loading, error } = useQuery(ProfileFormsQuery, {
     variables: {
       pk: pk_num

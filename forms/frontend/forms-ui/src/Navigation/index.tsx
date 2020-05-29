@@ -86,8 +86,8 @@ export default function ResponsiveDrawer(props: Props) {
           </Link>
         </ListItem>
         <ListItem>
-          <Link component={RouterLink} to="/profile">
-            Profile
+          <Link component={RouterLink} to="/forms">
+            Forms
           </Link>
         </ListItem>
       </List>

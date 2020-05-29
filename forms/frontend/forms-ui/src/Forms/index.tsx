@@ -1,20 +1,21 @@
 import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import ProfileList from "./ProfileList";
-import ProfileForm from "./ProfileForm";
+import Forms from "./Forms";
 
-function DueDiligenceIndex() {
+function FormsIndex() {
   const { path } = useRouteMatch();
+  console.log(path);
   return (
     <Switch>
       <Route exact path={path}>
         <ProfileList />
       </Route>
       <Route path={`${path}/:pk`}>
-        <ProfileForm />
+        <Forms />
       </Route>
     </Switch>
   );
 }
 
-export default DueDiligenceIndex;
+export default FormsIndex;

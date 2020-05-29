@@ -12,7 +12,7 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns = [
         # CSRF Exempt for convenience during development
-        url(r'graphiql$', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    url(r'graphql$', csrf_exempt(GraphQLView.as_view(graphiql=True))),
     ] + urlpatterns
     import debug_toolbar
     urlpatterns = [

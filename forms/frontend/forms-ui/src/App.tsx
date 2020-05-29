@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // is there a default theme that i can just supply for convenience's sake?
 import { ThemeProvider } from "@material-ui/core/styles";
 import Navigation from "./Navigation";
-import Profile from "./Profile";
+import Forms from "./Forms";
 import Home from "./Home";
 import theme from "./theme";
 import link from "./link";
@@ -17,13 +17,13 @@ const client = new ApolloClient({
 
 function App() {
   return (
-    <Router>
+    <Router basename="/forms">
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
           <Navigation>
             <Switch>
-              <Route path="/profile">
-                <Profile />
+              <Route path="/forms">
+                <Forms />
               </Route>
               <Route path="/">
                 <Home />

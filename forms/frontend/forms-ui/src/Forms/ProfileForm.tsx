@@ -11,6 +11,8 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 
+export const phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
@@ -33,6 +35,14 @@ const fragments = {
   `
 };
 
+const ProfileFormSchema = Yup.object().shape({
+  name: Yup.string().required("Required"),
+  age: Yup.number(),
+  phoneNumber: Yup.string()
+    .matches(phoneRegExp, "Phone is not valid")
+    .required("Required")
+});
+
 interface Props {
   profile: ProfileData;
 }
@@ -52,7 +62,7 @@ function ProfileForm(props: Props) {
           <Formik
             onSubmit={values => console.log(values)}
             initialValues={initialValues}
-            validationSchema={ProfileValidationSchema}
+            validationSchema={ProfileFormSchema}
           >
             {props => (
               <Grid item xs={12}>
@@ -73,9 +83,23 @@ function ProfileForm(props: Props) {
                   {({ field, form: { isSubmitting }, meta }: FieldProps) => (
                     <TextField
                       {...field}
+                      type="number"
                       id="acq"
                       select
                       label="Age"
+                      fullWidth
+                      variant="outlined"
+                      error={!!meta.error}
+                    ></TextField>
+                  )}
+                </Field>
+                <Field name="phoneNumber">
+                  {({ field, form: { isSubmitting }, meta }: FieldProps) => (
+                    <TextField
+                      {...field}
+                      id="acq"
+                      select
+                      label="Phone Number"
                       fullWidth
                       variant="outlined"
                       error={!!meta.error}
