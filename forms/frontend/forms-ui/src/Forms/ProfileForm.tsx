@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       padding: theme.spacing(2),
       flex: 1
+    },
+    textInput: {
+      padding: "0 0 10px 0"
     }
   })
 );
@@ -25,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const fragments = {
   data: gql`
     fragment ProfileData on Profile {
+      id
       name
       age
       phoneNumber
@@ -34,6 +38,21 @@ const fragments = {
     }
   `
 };
+
+const UPDATE_PROFILE_INFORMATION = gql`
+  mutation UpdateProfile($input: UpdateProfileInput!) {
+    updateProfile(input: $input) {
+      profile {
+        ...ProfileData
+      }
+      errors {
+        field
+        messages
+      }
+    }
+  }
+  ${fragments.data}
+`;
 
 const ProfileFormSchema = Yup.object().shape({
   name: Yup.string().required("Required"),
@@ -49,18 +68,28 @@ interface Props {
 
 function ProfileForm(props: Props) {
   const classes = useStyles();
-  const initialValues = { age: 0 };
+  const { profile } = props;
+    const initialValues = { name: profile?.name || "", age: profile?.age || "", phoneNumber: profile?.phoneNumber || "" };
+  const [updateProfile] = useMutation(UPDATE_PROFILE_INFORMATION);
   return (
     <Grid container item spacing={2} xs={12} sm={6}>
       <Paper className={classes.paper}>
         <Grid item xs={12}>
-          <Typography variant="h5" component="h2" gutterBottom>
-            Enter your profile information
+          <Typography variant="h5" gutterBottom>
+            Enter the user's profile information
           </Typography>
         </Grid>
         <Grid container item xs={12}>
           <Formik
-            onSubmit={values => console.log(values)}
+            onSubmit={async values =>
+              updateProfile({
+                variables: {
+                  input: {
+                    ...values
+                  }
+                }
+              })
+            }
             initialValues={initialValues}
             validationSchema={ProfileFormSchema}
           >
@@ -69,40 +98,43 @@ function ProfileForm(props: Props) {
                 <Field name="name">
                   {({ field, form: { isSubmitting }, meta }: FieldProps) => (
                     <TextField
+                      className={classes.textInput}
                       {...field}
                       id="acq"
-                      select
                       label="Name"
                       fullWidth
                       variant="outlined"
                       error={!!meta.error}
+                      helperText={meta.error}
                     ></TextField>
                   )}
                 </Field>
                 <Field name="age">
                   {({ field, form: { isSubmitting }, meta }: FieldProps) => (
                     <TextField
+                      className={classes.textInput}
                       {...field}
                       type="number"
                       id="acq"
-                      select
                       label="Age"
                       fullWidth
                       variant="outlined"
                       error={!!meta.error}
+                      helperText={meta.error}
                     ></TextField>
                   )}
                 </Field>
                 <Field name="phoneNumber">
                   {({ field, form: { isSubmitting }, meta }: FieldProps) => (
                     <TextField
+                      className={classes.textInput}
                       {...field}
                       id="acq"
-                      select
                       label="Phone Number"
                       fullWidth
                       variant="outlined"
                       error={!!meta.error}
+                      helperText={meta.error}
                     ></TextField>
                   )}
                 </Field>
