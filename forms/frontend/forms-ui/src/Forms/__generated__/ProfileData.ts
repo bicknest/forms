@@ -17,6 +17,10 @@ export interface ProfileData_business {
 
 export interface ProfileData {
   __typename: "Profile";
+  /**
+   * The ID of the object.
+   */
+  id: string;
   name: string;
   age: number | null;
   phoneNumber: string;

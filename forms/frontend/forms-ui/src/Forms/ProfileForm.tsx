@@ -83,10 +83,11 @@ function ProfileForm(props: Props) {
         </Grid>
         <Grid container item xs={12}>
           <Formik
-            onSubmit={async values =>
+            onSubmit={async (values) => 
               updateProfile({
                 variables: {
                   input: {
+                    id: profile?.id || "",
                     ...values
                   }
                 }

@@ -4,7 +4,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphql_relay import from_global_id
 from django import forms
 import django_filters
-from graphene_django.forms.mutation import DjangoModelFormMutation
+from libs.graphene import ModelFormMutationRelayID
 
 import core.models
 
@@ -71,9 +71,23 @@ class ProfileForm(forms.ModelForm):
         fields = ['name', 'age', 'phone_number', 'business']
 
 
-class UpdateProfile(DjangoModelFormMutation):
+class UpdateProfile(ModelFormMutationRelayID):
     class Meta:
         form_class = ProfileForm
+
+    """
+    @classmethod
+    def get_form_kwargs(cls, root, info, **input):
+        form_kwargs = super().get_form_kwargs(root, info, **input)
+        business_id = form_kwargs["data"]["business"]
+        try:
+            instance = cls._meta.model._default_manager.get(business_id=business_id)
+            form_kwargs["instance"] = instance
+        except cls._meta.model.DoesNotExist:
+            pass
+
+        return form_kwargs
+    """
 
 
 class Mutation(graphene.ObjectType):
