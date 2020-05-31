@@ -9,6 +9,20 @@ from libs.graphene import ModelFormMutationRelayID
 import core.models
 
 
+class ResolveIDAsPKMixin(object):
+    """
+    Because the Relay specification uses the id field
+    as a global object id, we need to expose our interal id
+    with a different name.
+    Adding this mixin will resolve the field 'pk' to the
+    pk of the model
+    """
+    pk = graphene.NonNull(graphene.Int)
+
+    def resolve_pk(root, info):
+        return root.pk
+
+
 class ProfileFilter(django_filters.FilterSet):
     pk = django_filters.NumberFilter('id')
 
@@ -17,7 +31,7 @@ class ProfileFilter(django_filters.FilterSet):
         exclude = ['id']
 
 
-class Profile(DjangoObjectType):
+class Profile(DjangoObjectType, ResolveIDAsPKMixin):
     class Meta:
         model = core.models.Profile
         interfaces = (graphene.relay.Node,)
@@ -32,7 +46,7 @@ class BusinessFilter(django_filters.FilterSet):
         exclude = ['id']
 
 
-class Business(DjangoObjectType):
+class Business(DjangoObjectType, ResolveIDAsPKMixin):
     class Meta:
         model = core.models.Business
         interfaces = (graphene.relay.Node,)
@@ -68,7 +82,7 @@ class Query(object):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = core.models.Profile
-        fields = ['name', 'age', 'phone_number', 'business']
+        fields = ['name', 'age', 'phone_number']
 
 
 class UpdateProfile(ModelFormMutationRelayID):

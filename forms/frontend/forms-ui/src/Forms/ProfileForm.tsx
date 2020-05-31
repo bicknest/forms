@@ -4,6 +4,7 @@ import { Formik, Field, FieldProps } from "formik";
 import { gql, useMutation } from "@apollo/client";
 
 import { ProfileData } from "./__generated__/ProfileData";
+import { UpdateProfile, UpdateProfileVariables } from "./__generated__/UpdateProfile";
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -11,6 +12,15 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+
+export const toCamel = (s: string) => {
+  return s.replace(/([-_][a-z])/gi, $1 => {
+    return $1
+      .toUpperCase()
+      .replace("-", "")
+      .replace("_", "");
+  });
+};
 
 export const phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
 
@@ -33,9 +43,6 @@ const fragments = {
       name
       age
       phoneNumber
-      business {
-        id
-      }
     }
   `
 };
@@ -61,7 +68,6 @@ const ProfileFormSchema = Yup.object().shape({
   phoneNumber: Yup.string()
     .matches(phoneRegExp, "Phone is not valid")
     .required("Required"),
-    business: Yup.number(),
 });
 
 interface Props {
@@ -71,8 +77,12 @@ interface Props {
 function ProfileForm(props: Props) {
   const classes = useStyles();
   const { profile } = props;
-    const initialValues = { name: profile?.name || "", age: profile?.age || "", phoneNumber: profile?.phoneNumber || "", business: profile?.business?.id || "" };
-  const [updateProfile] = useMutation(UPDATE_PROFILE_INFORMATION);
+  const initialValues = {
+        name: profile?.name || "",
+        age: profile?.age || "",
+        phoneNumber: profile?.phoneNumber || "",
+  };
+    const [updateProfile] = useMutation<UpdateProfile, UpdateProfileVariables>(UPDATE_PROFILE_INFORMATION);
   return (
     <Grid container item spacing={2} xs={12} sm={6}>
       <Paper className={classes.paper}>
@@ -88,7 +98,8 @@ function ProfileForm(props: Props) {
                 variables: {
                   input: {
                     id: profile?.id || "",
-                    ...values
+                    ...values,
+                      age: typeof values.age === "string" ? parseInt(values.age) : values.age,
                   }
                 }
               })
@@ -134,21 +145,6 @@ function ProfileForm(props: Props) {
                       {...field}
                       id="acq"
                       label="Phone Number"
-                      fullWidth
-                      variant="outlined"
-                      error={!!meta.error}
-                      helperText={meta.error}
-                    ></TextField>
-                  )}
-                </Field>
-                <Field name="business">
-                  {({ field, form: { isSubmitting }, meta }: FieldProps) => (
-                    <TextField
-                      className={classes.textInput}
-                      {...field}
-                      type="number"
-                      id="acq"
-                      label="Business ID"
                       fullWidth
                       variant="outlined"
                       error={!!meta.error}

@@ -7,14 +7,6 @@
 // GraphQL query operation: FormsData
 // ====================================================
 
-export interface FormsData_profile_business {
-  __typename: "Business";
-  /**
-   * The ID of the object.
-   */
-  id: string;
-}
-
 export interface FormsData_profile {
   __typename: "Profile";
   /**
@@ -24,7 +16,6 @@ export interface FormsData_profile {
   name: string;
   age: number | null;
   phoneNumber: string;
-  business: FormsData_profile_business | null;
 }
 
 export interface FormsData {

@@ -7,14 +7,6 @@
 // GraphQL fragment: ProfileData
 // ====================================================
 
-export interface ProfileData_business {
-  __typename: "Business";
-  /**
-   * The ID of the object.
-   */
-  id: string;
-}
-
 export interface ProfileData {
   __typename: "Profile";
   /**
@@ -24,5 +16,4 @@ export interface ProfileData {
   name: string;
   age: number | null;
   phoneNumber: string;
-  business: ProfileData_business | null;
 }
