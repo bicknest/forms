@@ -1,6 +1,7 @@
 import graphene
 from graphene_django.types import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
+from graphql_relay import from_global_id
 from django import forms
 import django_filters
 from graphene_django.forms.mutation import DjangoModelFormMutation
@@ -44,6 +45,24 @@ class Query(object):
 
     business = graphene.Field(Business, id=graphene.ID(required=False), pk=graphene.Int(required=False))
     node = graphene.relay.Node.Field()
+
+    def resolve_profile(self, info, **kwargs):
+        id = kwargs.get('id')
+        pk = kwargs.get('pk')
+        if id is not None:
+            _, pk = from_global_id(id)
+            return core.models.Profile.objects.get(id=pk)
+        if pk is not None:
+            return core.models.Profile.objects.get(id=pk)
+
+    def resolve_business(self, info, **kwargs):
+        id = kwargs.get('id')
+        pk = kwargs.get('pk')
+        if id is not None:
+            _, pk = from_global_id(id)
+            return core.models.Business.objects.get(id=pk)
+        if pk is not None:
+            return core.models.Business.objects.get(id=pk)
 
 
 class ProfileForm(forms.ModelForm):

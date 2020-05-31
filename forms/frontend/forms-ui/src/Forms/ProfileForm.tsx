@@ -6,6 +6,7 @@ import { gql, useMutation } from "@apollo/client";
 import { ProfileData } from "./__generated__/ProfileData";
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -59,7 +60,8 @@ const ProfileFormSchema = Yup.object().shape({
   age: Yup.number(),
   phoneNumber: Yup.string()
     .matches(phoneRegExp, "Phone is not valid")
-    .required("Required")
+    .required("Required"),
+    business: Yup.number(),
 });
 
 interface Props {
@@ -69,7 +71,7 @@ interface Props {
 function ProfileForm(props: Props) {
   const classes = useStyles();
   const { profile } = props;
-    const initialValues = { name: profile?.name || "", age: profile?.age || "", phoneNumber: profile?.phoneNumber || "" };
+    const initialValues = { name: profile?.name || "", age: profile?.age || "", phoneNumber: profile?.phoneNumber || "", business: profile?.business?.id || "" };
   const [updateProfile] = useMutation(UPDATE_PROFILE_INFORMATION);
   return (
     <Grid container item spacing={2} xs={12} sm={6}>
@@ -138,6 +140,24 @@ function ProfileForm(props: Props) {
                     ></TextField>
                   )}
                 </Field>
+                <Field name="business">
+                  {({ field, form: { isSubmitting }, meta }: FieldProps) => (
+                    <TextField
+                      className={classes.textInput}
+                      {...field}
+                      type="number"
+                      id="acq"
+                      label="Business ID"
+                      fullWidth
+                      variant="outlined"
+                      error={!!meta.error}
+                      helperText={meta.error}
+                    ></TextField>
+                  )}
+                </Field>
+                <Button onClick={() => props.handleSubmit()}>
+                    Submit
+                </Button>
               </Grid>
             )}
           </Formik>
